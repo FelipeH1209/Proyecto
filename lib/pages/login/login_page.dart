@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_ganaderia/database/localDb.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -85,7 +86,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Builder(builder: (context) {
               return ElevatedButton(
-                onPressed: () => _submit(context),
+                onPressed: () async {
+                  await LocalDatabase().addDataLocally(Name: _email);
+                },
                 child: const Text(
                   'Ingresar',
                   style: TextStyle(
@@ -108,9 +111,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _submit(BuildContext context) {
     final formState = context.findAncestorStateOfType<FormState>();
-    if (formState!.validate()) {
-      print('hello pass');
-    }
+    print(formState);
 
     // if (_formKey.currentState!.validate()) {
     //   // send form request
