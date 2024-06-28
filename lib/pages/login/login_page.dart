@@ -87,7 +87,8 @@ class _LoginPageState extends State<LoginPage> {
             Builder(builder: (context) {
               return ElevatedButton(
                 onPressed: () async {
-                  await LocalDatabase().addDataLocally(Name: _email);
+                  await LocalDatabase()
+                      .readUser(email: _email, password: _password);
                 },
                 child: const Text(
                   'Ingresar',

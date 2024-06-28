@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_ganaderia/models/user_model.dart';
-import 'package:flutter_application_ganaderia/pages/perfil.dart';
-import 'package:flutter_application_ganaderia/pages/qrscaner.dart';
 
 import 'pages/login/login_page.dart';
 
