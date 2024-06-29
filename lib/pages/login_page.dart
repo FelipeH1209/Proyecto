@@ -1,5 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_ganaderia/database/localDb.dart';
+import 'package:flutter_application_ganaderia/routes.dart';
+
+// de esta manera se refactoriza el menu page para que tenga rutas creadas a partir de una clase
+class PageData {
+  final String name;
+  final String label;
+  final Object?
+      arguments; // con el interrogante permite crear instancias de una clase y este atributo puede ser nulo o no
+  final void Function(Object?)? onResult;
+
+  PageData({
+    required this.name,
+    required this.label,
+    this.arguments,
+    this.onResult,
+  });
+}
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -9,7 +26,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late final List<PageData> _pages;
   String _email = '', _password = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      PageData(
+        name: Routes.home,
+        label: 'Go menu',
+        arguments: _email,
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +117,21 @@ class _LoginPageState extends State<LoginPage> {
             Builder(builder: (context) {
               return ElevatedButton(
                 onPressed: () async {
-                  await LocalDatabase()
+                  final data = _pages[0];
+                  final validateUser = await LocalDatabase()
                       .readUser(email: _email, password: _password);
+                  if (validateUser) {
+                    final result = await Navigator.pushNamed(
+                      context,
+                      data.name,
+                      arguments: data.arguments,
+                    );
+                    if (data.onResult != null) {
+                      data.onResult!(result);
+                    }
+                  } else {
+                    print('Usuario incorrecto');
+                  }
                 },
                 child: const Text(
                   'Ingresar',

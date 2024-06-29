@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_ganaderia/app_routes.dart';
+import 'package:flutter_application_ganaderia/routes.dart';
 
-import 'pages/login/login_page.dart';
+import 'pages/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,7 +30,9 @@ class _MyAppState extends State<MyApp> {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: LoginPage(),
+        // home: LoginPage(),
+        initialRoute: Routes.initialRoute,
+        routes: appRoutes,
       ),
     );
   }

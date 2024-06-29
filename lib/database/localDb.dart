@@ -33,20 +33,14 @@ class LocalDatabase {
 
   Future readUser({email, password}) async {
     final db = await database;
-    // await db.execute("DROP TABLE IF EXISTS users");
-    // await db.execute('''
-    //     CREATE TABLE users( id INTEGER PRIMARY KEY AUTOINCREMENT,
-    //                         name VARCHAR(255),
-    //                         email VARCHAR(100),
-    //                         password VARCHAR(50)
-    //                       )
-    //   ''');
     await db.insert('users',
         {"name": "Admin", "email": "admin@gmail.com", "password": "123456789"});
-    final data = await db!.rawQuery(
+    final List data = await db!.rawQuery(
         "SELECT * FROM users WHERE email = '${email}' AND password = '${password}'");
-    print(data);
-    return 'data';
+    if (!data.isEmpty) {
+      return true;
+    }
+    return false;
   }
 
   // Future addDataLocally({Name}) async {
