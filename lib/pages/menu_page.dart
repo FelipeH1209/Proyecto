@@ -28,33 +28,14 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   Color _color = Colors.indigo.shade400;
-  late final List<PageData> _pages;
+  late DateTime _initialDate, _date;
+
   @override
   void initState() {
     super.initState();
-    _pages = [
-      PageData(
-        name: Routes
-            .login, // <- esto hay que cambiarlo cuando se vaya creando las vistas
-        label: 'Consulta',
-        arguments: 'Jerson0493@gmail.com',
-        icon: Icons.visibility,
-      ),
-      PageData(
-        name: Routes
-            .login, // <- esto hay que cambiarlo cuando se vaya creando las vistas
-        label: 'Registro',
-        arguments: 'Jerson0493@gmail.com',
-        icon: Icons.add_alert_rounded,
-      ),
-      PageData(
-        name: Routes
-            .login, // <- esto hay que cambiarlo cuando se vaya creando las vistas
-        label: 'Actualización',
-        arguments: 'Jerson0493@gmail.com',
-        icon: Icons.edit,
-      ),
-    ];
+
+    _initialDate = DateTime(2010, 1);
+    _date = _initialDate;
   }
 
   @override
@@ -64,6 +45,17 @@ class _MenuPageState extends State<MenuPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _color,
+        actions: [
+          IconButton(
+            onPressed: _selectedDate,
+            icon: Icon(Icons.calendar_month),
+          ),
+          IconButton(
+            // si initial date es diferente a la fecha inicial habilitamos el botom
+            onPressed: _initialDate != _date ? () {} : null,
+            icon: const Icon(Icons.save),
+          ),
+        ],
         // automaticallyImplyLeading: false,
       ),
       drawer: SizedBox(
@@ -131,8 +123,26 @@ class _MenuPageState extends State<MenuPage> {
           ),
         ),
       ),
-      body: Center(
-        child: Text('Contenido de la aplicación'),
+      body: SafeArea(
+        child: CalendarDatePicker(
+          // Date time (año, mes, dia)
+          // fecha inicial en que sale el calendario
+          initialDate: _date,
+          // first date fecha inicial para el calendario
+          firstDate: DateTime(2010, 1),
+          lastDate: DateTime.now(),
+          // como se visualizara en forma inicial por año o normal
+          initialCalendarMode: DatePickerMode.day,
+          // deshabilitar todos los días sabados
+          selectableDayPredicate: (date) {
+            return date.weekday != 6;
+          },
+          onDateChanged: (date) {
+            setState(() {
+              _date = date;
+            });
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -143,5 +153,19 @@ class _MenuPageState extends State<MenuPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
+  }
+
+  void _selectedDate() async {
+    final date = await showDatePicker(
+      context: context,
+      initialDate: _date,
+      firstDate: DateTime(2000, 5),
+      lastDate: DateTime.now(),
+    );
+    if (date != null) {
+      setState(() {
+        _date = date;
+      });
+    }
   }
 }
