@@ -31,6 +31,16 @@ class LocalDatabase {
                             perfil INT(1)
                           )
       ''');
+
+    await db.execute('''
+        CREATE TABLE novillos( id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            pesoT VARCHAR(20),
+                            estaturaT VARCHAR(20),
+                            razaT VARCHAR(50),
+                            generoT VARCHAR(50)
+                          )
+      ''');
+
     await db.insert('users', {
       "name": "Admin",
       "email": "admin@gmail.com",
@@ -42,6 +52,7 @@ class LocalDatabase {
 
   Future readUser({email, password}) async {
     final db = await database;
+
     final List data = await db!.rawQuery(
         "SELECT * FROM users WHERE email = '${email}' AND password = '${password}'");
     if (!data.isEmpty) {
@@ -56,31 +67,15 @@ class LocalDatabase {
     return {};
   }
 
-  Future _createNo(Database db, int version) async {
-    await db.execute('''
-        CREATE TABLE novillo( id INTEGER PRIMARY KEY AUTOINCREMENT,
-                            pesoT VARCHAR(20),
-                            estaturaT VARCHAR(20),
-                            razaT VARCHAR(50),
-                            generoT VARCHAR(50)
-                          )
-      ''');
-    await db.insert('novillo', {
-      "pesoT": "Admin",
-      "email": "admin@gmail.com",
-      "password": "123456789"
-    });
-  }
-
-  Future addnovi() async {
+  Future addnovi(pesoT, estaturaT, razaT, generoT) async {
     final db = await database;
-    await db.insert('novillo', {
-      "pesoT": String,
-      "estaturaT": Float,
-      "razaT": String,
-      "generoT": String
+    await db.insert('novillos', {
+      "pesoT": pesoT,
+      "estaturaT": estaturaT,
+      "razaT": razaT,
+      "generoT": generoT
     });
-    return 'agregado';
+    return true;
   }
 
   // Future addDataLocally({Name}) async {

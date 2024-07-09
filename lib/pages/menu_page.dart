@@ -92,7 +92,7 @@ class _MenuPageState extends State<MenuPage> {
                 onTap: () async {
                   await Navigator.pushNamed(
                     context,
-                    Routes.login,
+                    Routes.reistrer,
                     arguments: '',
                   );
                 },
