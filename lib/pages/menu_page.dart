@@ -28,69 +28,144 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   Color _color = Colors.indigo.shade400;
-  late final List<PageData> _pages;
+  late DateTime _initialDate, _date;
+
   @override
   void initState() {
     super.initState();
-    _pages = [
-      PageData(
-        name: Routes
-            .login, // <- esto hay que cambiarlo cuando se vaya creando las vistas
-        label: 'Consulta',
-        arguments: 'Jerson0493@gmail.com',
-        icon: Icons.visibility,
-      ),
-      PageData(
-        name: Routes
-            .reistrer, // <- esto hay que cambiarlo cuando se vaya creando las vistas
-        label: 'Registro',
-        arguments: 'Jerson0493@gmail.com',
-        icon: Icons.add_alert_rounded,
-      ),
-      PageData(
-        name: Routes
-            .login, // <- esto hay que cambiarlo cuando se vaya creando las vistas
-        label: 'Actualización',
-        arguments: 'Jerson0493@gmail.com',
-        icon: Icons.edit,
-      ),
-    ];
+
+    _initialDate = DateTime(2010, 1);
+    _date = _initialDate;
   }
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _color,
+        actions: [
+          IconButton(
+            onPressed: _selectedDate,
+            icon: Icon(Icons.calendar_month),
+          ),
+          IconButton(
+            // si initial date es diferente a la fecha inicial habilitamos el botom
+            onPressed: _initialDate != _date ? () {} : null,
+            icon: const Icon(Icons.save),
+          ),
+        ],
         // automaticallyImplyLeading: false,
       ),
-      drawer: Drawer(
-        elevation: 10,
-        // Widget del drawer
-        child: ListView.builder(
-          itemBuilder: (_, index) {
-            final data = _pages[index];
-            return ListTile(
-              leading: Icon(data.icon),
-              title: Text(data.label),
-              onTap: () async {
-                final result = await Navigator.pushNamed(
-                  context,
-                  data.name,
-                  arguments: data.arguments,
-                );
-                if (data.onResult != null) {
-                  data.onResult!(result);
-                }
-              },
-            );
-          },
-          itemCount: _pages.length,
+      drawer: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.5,
+        child: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                accountName: Text(args['name']),
+                accountEmail: Text(args['email']),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage:
+                      AssetImage('assets/images/users/' + args['photo']),
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.indigo.shade400,
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.search),
+                title: Text('Consultar'),
+                onTap: () async {
+                  await Navigator.pushNamed(
+                    context,
+                    Routes.login,
+                    arguments: '',
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.app_registration),
+                title: Text('Registrar'),
+                onTap: () async {
+                  await Navigator.pushNamed(
+                    context,
+                    Routes.login,
+                    arguments: '',
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.update),
+                title: Text('Actualizar'),
+                onTap: () async {
+                  await Navigator.pushNamed(
+                    context,
+                    Routes.login,
+                    arguments: '',
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.group),
+                title: Text('Usuarios'),
+                onTap: () async {
+                  await Navigator.pushNamed(
+                    context,
+                    Routes.login,
+                    arguments: '',
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
-      body: Center(
-        child: Text('Contenido de la aplicación'),
+      body: SafeArea(
+        child: CalendarDatePicker(
+          // Date time (año, mes, dia)
+          // fecha inicial en que sale el calendario
+          initialDate: _date,
+          // first date fecha inicial para el calendario
+          firstDate: DateTime(2010, 1),
+          lastDate: DateTime.now(),
+          // como se visualizara en forma inicial por año o normal
+          initialCalendarMode: DatePickerMode.day,
+          // deshabilitar todos los días sabados
+          selectableDayPredicate: (date) {
+            return date.weekday != 6;
+          },
+          onDateChanged: (date) {
+            setState(() {
+              _date = date;
+            });
+          },
+        ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Acción cuando se presiona el botón
+        },
+        child: Icon(Icons.add),
+        tooltip: 'Agregar',
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
+  }
+
+  void _selectedDate() async {
+    final date = await showDatePicker(
+      context: context,
+      initialDate: _date,
+      firstDate: DateTime(2000, 5),
+      lastDate: DateTime.now(),
+    );
+    if (date != null) {
+      setState(() {
+        _date = date;
+      });
+    }
   }
 }

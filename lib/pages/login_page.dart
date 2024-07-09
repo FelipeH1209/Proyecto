@@ -28,6 +28,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late final List<PageData> _pages;
   String _email = '', _password = '';
+  bool _password_incorrect = false;
 
   @override
   void initState() {
@@ -39,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
         arguments: _email,
       ),
     ];
+    _password_incorrect = false;
   }
 
   @override
@@ -111,6 +113,14 @@ class _LoginPageState extends State<LoginPage> {
                 return 'Invalid password';
               },
             ),
+            _password_incorrect == true
+                ? Center(
+                    child: const Text(
+                      "Password incorrecto",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  )
+                : const Text(''),
             const SizedBox(
               height: 30,
             ),
@@ -120,17 +130,18 @@ class _LoginPageState extends State<LoginPage> {
                   final data = _pages[0];
                   final validateUser = await LocalDatabase()
                       .readUser(email: _email, password: _password);
-                  if (validateUser) {
+                  if (!validateUser.isEmpty) {
                     final result = await Navigator.pushNamed(
                       context,
                       data.name,
-                      arguments: data.arguments,
+                      arguments: validateUser,
                     );
                     if (data.onResult != null) {
                       data.onResult!(result);
                     }
                   } else {
-                    print('Usuario incorrecto');
+                    _password_incorrect = true;
+                    setState(() {});
                   }
                 },
                 child: const Text(
@@ -146,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                   elevation: 10,
                 ),
               );
-            })
+            }),
           ],
         ),
       ),

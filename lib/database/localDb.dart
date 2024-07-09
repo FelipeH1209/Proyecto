@@ -26,23 +26,34 @@ class LocalDatabase {
         CREATE TABLE users( id INTEGER PRIMARY KEY AUTOINCREMENT,
                             name VARCHAR(255),
                             email VARCHAR(100),
-                            password VARCHAR(50)
+                            password VARCHAR(50),
+                            photo VARCHAR(50),
+                            perfil INT(1)
                           )
       ''');
-    await db.insert('users',
-        {"name": "Admin", "email": "admin@gmail.com", "password": "123456789"});
+    await db.insert('users', {
+      "name": "Admin",
+      "email": "admin@gmail.com",
+      "password": "123456789",
+      "photo": "admin.png",
+      "perfil": "1",
+    });
   }
 
   Future readUser({email, password}) async {
     final db = await database;
-    await db.insert('users',
-        {"name": "Admin", "email": "admin@gmail.com", "password": "123456789"});
     final List data = await db!.rawQuery(
         "SELECT * FROM users WHERE email = '${email}' AND password = '${password}'");
     if (!data.isEmpty) {
-      return true;
+      var user = data[0];
+      return {
+        "name": user['name'],
+        "email": user['email'],
+        "photo": user['photo'],
+        "perfil": user['perfil']
+      };
     }
-    return false;
+    return {};
   }
 
   Future _createNo(Database db, int version) async {
