@@ -59,38 +59,89 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _color,
         // automaticallyImplyLeading: false,
       ),
-      drawer: Drawer(
-        elevation: 10,
-        // Widget del drawer
-        child: ListView.builder(
-          itemBuilder: (_, index) {
-            final data = _pages[index];
-            return ListTile(
-              leading: Icon(data.icon),
-              title: Text(data.label),
-              onTap: () async {
-                final result = await Navigator.pushNamed(
-                  context,
-                  data.name,
-                  arguments: data.arguments,
-                );
-                if (data.onResult != null) {
-                  data.onResult!(result);
-                }
-              },
-            );
-          },
-          itemCount: _pages.length,
+      drawer: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.5,
+        child: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                accountName: Text(args['name']),
+                accountEmail: Text(args['email']),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage:
+                      AssetImage('assets/images/users/' + args['photo']),
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.indigo.shade400,
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.search),
+                title: Text('Consultar'),
+                onTap: () async {
+                  await Navigator.pushNamed(
+                    context,
+                    Routes.login,
+                    arguments: '',
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.app_registration),
+                title: Text('Registrar'),
+                onTap: () async {
+                  await Navigator.pushNamed(
+                    context,
+                    Routes.login,
+                    arguments: '',
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.update),
+                title: Text('Actualizar'),
+                onTap: () async {
+                  await Navigator.pushNamed(
+                    context,
+                    Routes.login,
+                    arguments: '',
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.group),
+                title: Text('Usuarios'),
+                onTap: () async {
+                  await Navigator.pushNamed(
+                    context,
+                    Routes.login,
+                    arguments: '',
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
       body: Center(
         child: Text('Contenido de la aplicación'),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Acción cuando se presiona el botón
+        },
+        child: Icon(Icons.add),
+        tooltip: 'Agregar',
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
