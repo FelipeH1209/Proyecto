@@ -1,10 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_application_ganaderia/pages/qrscaner.dart';
 
 class Perfile extends StatelessWidget {
   var heigt, width;
 
   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Perfil usuario'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Registrar'),
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Qrscaner()));
+          },
+        ),
+      ),
+    );
+  }
+
+  /* @override
   Widget build(BuildContext context) {
     heigt = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
@@ -19,6 +38,45 @@ class Perfile extends StatelessWidget {
               width: width,
             ),
             Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: Text("Seleccione una opcion",
+                            style: TextStyle(fontSize: 35)),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _boton("Registrar"),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _boton("Actualizar"),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _boton("Insumos"),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _boton("Movimientos"),
+                    ],
+                  )
+                ],
+              ),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -28,39 +86,27 @@ class Perfile extends StatelessWidget {
               ),
               height: heigt * 0.75,
               width: width,
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1.1,
-                  mainAxisSpacing: 25,
-                ),
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: 6,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {},
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            spreadRadius: 1,
-                            blurRadius: 6,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
             ),
           ],
         ),
       ),
     );
   }
+}
+
+Widget _boton(String nombre) {
+  return InkWell(
+    child: Container(
+      width: 97,
+      height: 35,
+      child: Card(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text(nombre)],
+        ),
+      ),
+    ),
+  );
+}
+*/
 }

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -41,6 +43,33 @@ class LocalDatabase {
       return true;
     }
     return false;
+  }
+
+  Future _createNo(Database db, int version) async {
+    await db.execute('''
+        CREATE TABLE novillo( id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            pesoT VARCHAR(20),
+                            estaturaT VARCHAR(20),
+                            razaT VARCHAR(50),
+                            generoT VARCHAR(50)
+                          )
+      ''');
+    await db.insert('novillo', {
+      "pesoT": "Admin",
+      "email": "admin@gmail.com",
+      "password": "123456789"
+    });
+  }
+
+  Future addnovi() async {
+    final db = await database;
+    await db.insert('novillo', {
+      "pesoT": String,
+      "estaturaT": Float,
+      "razaT": String,
+      "generoT": String
+    });
+    return 'agregado';
   }
 
   // Future addDataLocally({Name}) async {

@@ -42,7 +42,7 @@ class _MenuPageState extends State<MenuPage> {
       ),
       PageData(
         name: Routes
-            .login, // <- esto hay que cambiarlo cuando se vaya creando las vistas
+            .reistrer, // <- esto hay que cambiarlo cuando se vaya creando las vistas
         label: 'Registro',
         arguments: 'Jerson0493@gmail.com',
         icon: Icons.add_alert_rounded,
