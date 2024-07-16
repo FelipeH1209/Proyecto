@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:ffi';
 
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -53,6 +55,39 @@ class LocalDatabase {
         "perfil": user['perfil']
       };
     }
+    return {};
+  }
+
+  Future readAllUser() async {
+    final db = await database;
+    var users = <Map>[];
+    final List data = await db!.rawQuery("SELECT * FROM users");
+    if (!data.isEmpty) {
+      for (var i = 0; i < data.length; i++) {
+        var user = data[i];
+        var json = <String, Object>{
+          "name": user['name'],
+          "email": user['email'],
+          "photo": user['photo'],
+          "perfil": user['perfil'].toString(),
+        };
+        users.add(json);
+      }
+      return users;
+    }
+    return {};
+  }
+
+  Future insertUser({name, email, password, perfil}) async {
+    var photo = perfil == '1' ? "admin.png" : "operator.png";
+    final db = await database;
+    await db.insert('users', {
+      "name": name,
+      "email": email,
+      "password": password,
+      "photo": photo,
+      "perfil": perfil,
+    });
     return {};
   }
 

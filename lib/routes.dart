@@ -10,4 +10,5 @@ class Routes {
   static const pickerColor = '/picker-color';
   static const dialog = '/dialogs';
   static const reistrer = '/registrer';
+  static const users = '/usuarios';
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_ganaderia/pages/login_page.dart';
 import 'package:flutter_application_ganaderia/pages/menu_page.dart';
 import 'package:flutter_application_ganaderia/pages/qrscaner.dart';
+import 'package:flutter_application_ganaderia/pages/users_page.dart';
 
 import 'pages/splash_page.dart';
 import 'routes.dart';
@@ -17,5 +18,6 @@ Map<String, Widget Function(BuildContext)> get appRoutes {
     Routes.splash: (context) => const SplashPage(),
     Routes.login: (context) => const LoginPage(),
     Routes.reistrer: (context) => Qrscaner(),
+    Routes.users: (context) => const UsersPage(),
   };
 }

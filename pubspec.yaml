@@ -67,6 +67,7 @@ flutter:
     - assets/images/vacas.jpg
     - assets/images/logo_login.png
     - assets/images/users/admin.png
+    - assets/images/users/operator.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

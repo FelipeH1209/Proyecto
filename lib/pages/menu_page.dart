@@ -92,7 +92,7 @@ class _MenuPageState extends State<MenuPage> {
                 onTap: () async {
                   await Navigator.pushNamed(
                     context,
-                    Routes.login,
+                    Routes.reistrer,
                     arguments: '',
                   );
                 },
@@ -114,8 +114,8 @@ class _MenuPageState extends State<MenuPage> {
                 onTap: () async {
                   await Navigator.pushNamed(
                     context,
-                    Routes.login,
-                    arguments: '',
+                    Routes.users,
+                    arguments: args,
                   );
                 },
               ),
@@ -134,9 +134,7 @@ class _MenuPageState extends State<MenuPage> {
           // como se visualizara en forma inicial por año o normal
           initialCalendarMode: DatePickerMode.day,
           // deshabilitar todos los días sabados
-          selectableDayPredicate: (date) {
-            return date.weekday != 6;
-          },
+
           onDateChanged: (date) {
             setState(() {
               _date = date;
@@ -148,8 +146,13 @@ class _MenuPageState extends State<MenuPage> {
         onPressed: () {
           // Acción cuando se presiona el botón
         },
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
         tooltip: 'Agregar',
+        backgroundColor: Colors.indigo.shade300,
+        hoverColor: Colors.indigo.shade900,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
