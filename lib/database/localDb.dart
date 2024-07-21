@@ -58,6 +58,22 @@ class LocalDatabase {
     return {};
   }
 
+  Future getUserById({id}) async {
+    final db = await database;
+    final List data =
+        await db!.rawQuery("SELECT * FROM users WHERE id = '${id}'");
+    if (!data.isEmpty) {
+      var user = data[0];
+      return {
+        "name": user['name'],
+        "email": user['email'],
+        "photo": user['photo'],
+        "perfil": user['perfil'].toString()
+      };
+    }
+    return {};
+  }
+
   Future readAllUser() async {
     final db = await database;
     var users = <Map>[];
@@ -66,6 +82,7 @@ class LocalDatabase {
       for (var i = 0; i < data.length; i++) {
         var user = data[i];
         var json = <String, Object>{
+          "id": user['id'],
           "name": user['name'],
           "email": user['email'],
           "photo": user['photo'],
@@ -88,6 +105,20 @@ class LocalDatabase {
       "photo": photo,
       "perfil": perfil,
     });
+    return {};
+  }
+
+  Future updateUser({id, name, email, password, perfil}) async {
+    var photo = perfil == '1' ? "admin.png" : "operator.png";
+    final db = await database;
+    await db!.rawQuery("""
+      UPDATE users SET 
+        name = '${name}',
+        email = '${email}',
+        password = '${password}',
+        photo = '${photo}',
+        perfil = '${perfil}'
+      WHERE id = '${id}'""");
     return {};
   }
 

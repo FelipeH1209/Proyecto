@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_ganaderia/pages/user_add_page.dart';
+import 'package:flutter_application_ganaderia/pages/user_edit_page.dart';
 import 'package:flutter_application_ganaderia/routes.dart';
 import 'package:flutter_application_ganaderia/database/localDb.dart';
 
@@ -22,6 +24,7 @@ class _UsersPageState extends State<UsersPage> {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: _color,
         actions: [
@@ -132,51 +135,87 @@ class _UsersPageState extends State<UsersPage> {
   }
 }
 
-class DataTableExample extends StatelessWidget {
-  // var usuarios = getDataUser();
+class DataTableExample extends StatefulWidget {
+  @override
+  State<DataTableExample> createState() => _DataTableExampleState();
+}
+
+class _DataTableExampleState extends State<DataTableExample> {
+  void _editRecord(int index) async {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: FormEditModal(index: index),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Map<dynamic, dynamic>>>(
-      future: getDataUser(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('No data available'));
-        } else {
-          final users = snapshot.data!;
-          return DataTable(
-            columns: const <DataColumn>[
-              DataColumn(
-                label: Text('Nombre'),
-              ),
-              DataColumn(
-                label: Text('Correo'),
-              ),
-              DataColumn(
-                label: Text('Tipo'),
-              ),
-            ],
-            rows: users.map((user) {
-              String perfil = '';
-              if (user['perfil'] == '1') {
-                perfil = 'Administrador';
-              } else {
-                perfil = 'Operador';
-              }
-              return DataRow(
-                cells: <DataCell>[
-                  DataCell(Text(user['name']!)),
-                  DataCell(Text(user['email']!)),
-                  DataCell(Text(perfil)),
-                ],
-              );
-            }).toList(),
-          );
-        }
-      },
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: FutureBuilder<List<Map<dynamic, dynamic>>>(
+        future: getDataUser(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No data available'));
+          } else {
+            final users = snapshot.data!;
+            return DataTable(
+              columns: const <DataColumn>[
+                DataColumn(
+                  label: Text('Nombre'),
+                ),
+                DataColumn(
+                  label: Text('Correo'),
+                ),
+                DataColumn(
+                  label: Text('Tipo'),
+                ),
+                DataColumn(
+                  label: Text('Acción'),
+                ),
+              ],
+              rows: users.map((user) {
+                int _index = user['id'];
+                String perfil = '';
+                if (user['perfil'] == '1') {
+                  perfil = 'Administrador';
+                } else {
+                  perfil = 'Operador';
+                }
+                return DataRow(
+                  cells: <DataCell>[
+                    DataCell(Text(user['name']!)),
+                    DataCell(Text(user['email']!)),
+                    DataCell(Text(perfil)),
+                    DataCell(
+                      (_index != 1)
+                          ? IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: () {
+                                _editRecord(_index);
+                              },
+                            )
+                          : Text(''),
+                    )
+                  ],
+                );
+              }).toList(),
+            );
+          }
+        },
+      ),
     );
   }
 }
@@ -184,145 +223,4 @@ class DataTableExample extends StatelessWidget {
 Future<List<Map<dynamic, dynamic>>> getDataUser() async {
   final validateUser = await LocalDatabase().readAllUser();
   return validateUser;
-}
-
-class FormModal extends StatefulWidget {
-  @override
-  _FormModalState createState() => _FormModalState();
-}
-
-class _FormModalState extends State<FormModal> {
-  final _formKey = GlobalKey<FormState>();
-  String _name = '';
-  String _email = '';
-  String _perfil = '';
-  String _password = '';
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Nombre'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Por favor, ingrese su nombre';
-                }
-                return null;
-              },
-              onSaved: (value) {
-                _name = value ?? '';
-              },
-            ),
-            // correo electronico
-            TextFormField(
-              key: const Key('login-email'),
-              onChanged: (text) {
-                _email = text.trim();
-              },
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                label: Text('Email'),
-              ),
-              validator: (text) {
-                text = text ?? '';
-                final isValid = RegExp(
-                        r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-                    .hasMatch(text);
-                if (isValid) {
-                  return null;
-                }
-                return 'Invalid email';
-              },
-              onSaved: (value) {
-                _email = value ?? '';
-              },
-            ),
-            // perfiles
-            DropdownButtonFormField<String>(
-              decoration: InputDecoration(labelText: 'Perfil'),
-              value: _perfil.isEmpty ? null : _perfil,
-              items: ['Administrador', 'Operador']
-                  .map((option) => DropdownMenuItem(
-                        value: option,
-                        child: Text(option),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  _perfil = value ?? '';
-                });
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Por favor, seleccione una opción';
-                }
-                return null;
-              },
-              onSaved: (value) {
-                _perfil = value ?? '';
-              },
-            ),
-            TextFormField(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              key: const Key('user-pass'),
-              onChanged: (value) {
-                _password = value.replaceAll(' ', '');
-              },
-              obscureText: true,
-              decoration: const InputDecoration(
-                label: Text('Contraseña'),
-              ),
-              validator: (value) {
-                value = value ?? '';
-                if (value.length >= 8) {
-                  return null;
-                }
-                return 'Invalid password';
-              },
-              onSaved: (value) {
-                _password = value ?? '';
-              },
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                if (_formKey.currentState?.validate() ?? false) {
-                  _formKey.currentState?.save();
-                  Navigator.pop(context);
-                  // Aquí puedes manejar los datos del formulario
-                  await LocalDatabase().insertUser(
-                      name: _name,
-                      email: _email,
-                      password: _password,
-                      perfil: _perfil);
-                  setState(() {});
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.indigo.shade400,
-                shadowColor: Colors.black, // Color de la sombra
-                elevation: 5, // Elevación del botón
-                padding: EdgeInsets.symmetric(
-                    horizontal: 30, vertical: 15), // Padding del botón
-                textStyle: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold), // Estilo del texto
-              ),
-              child: Text(
-                'Guardar',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
