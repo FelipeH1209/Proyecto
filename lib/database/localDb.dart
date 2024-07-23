@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:ffi';
 
-import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -120,6 +119,11 @@ class LocalDatabase {
         perfil = '${perfil}'
       WHERE id = '${id}'""");
     return {};
+  }
+
+  Future deleteUser({id}) async {
+    final db = await database;
+    await db!.rawQuery("DELETE FROM users WHERE id = ${id}");
   }
 
   Future _createNo(Database db, int version) async {

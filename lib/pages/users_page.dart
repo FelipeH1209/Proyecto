@@ -156,6 +156,40 @@ class _DataTableExampleState extends State<DataTableExample> {
     );
   }
 
+  Future<bool?> _deleteRecor(BuildContext context, int index) {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirmar tu acción'),
+          content: Text('¿ Estas Seguro de proceder ?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(false); // Cierra el diálogo y retorna false
+              },
+              child: Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await LocalDatabase().deleteUser(id: index);
+                Navigator.of(context)
+                    .pop(true); // Cierra el diálogo y retorna true
+              },
+              child: Text('Confirmar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // void _deleteRecor(int index) async {
+  //
+  //   setState(() {});
+  // }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -183,7 +217,12 @@ class _DataTableExampleState extends State<DataTableExample> {
                   label: Text('Tipo'),
                 ),
                 DataColumn(
-                  label: Text('Acción'),
+                  label: Center(
+                    child: Text(
+                      'Acción',
+                    ),
+                  ),
+                  numeric: true,
                 ),
               ],
               rows: users.map((user) {
@@ -201,11 +240,23 @@ class _DataTableExampleState extends State<DataTableExample> {
                     DataCell(Text(perfil)),
                     DataCell(
                       (_index != 1)
-                          ? IconButton(
-                              icon: Icon(Icons.edit),
-                              onPressed: () {
-                                _editRecord(_index);
-                              },
+                          ? Center(
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.edit),
+                                    onPressed: () {
+                                      _editRecord(_index);
+                                    },
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        _deleteRecor(context, _index);
+                                        setState(() {});
+                                      },
+                                      icon: Icon(Icons.delete))
+                                ],
+                              ),
                             )
                           : Text(''),
                     )

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_ganaderia/database/localDb.dart';
 import 'package:flutter_application_ganaderia/routes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // de esta manera se refactoriza el menu page para que tenga rutas creadas a partir de una clase
 class PageData {
@@ -131,6 +132,9 @@ class _LoginPageState extends State<LoginPage> {
                   final validateUser = await LocalDatabase()
                       .readUser(email: _email, password: _password);
                   if (!validateUser.isEmpty) {
+                    final prefs = await SharedPreferences.getInstance();
+                    await prefs.setString(
+                        'auth_token', 'mi_token_de_autenticacion');
                     final result = await Navigator.pushNamed(
                       context,
                       data.name,

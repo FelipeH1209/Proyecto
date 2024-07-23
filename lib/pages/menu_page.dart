@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_ganaderia/routes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // de esta manera se refactoriza el menu page para que tenga rutas creadas a partir de una clase
 class PageData {
@@ -116,6 +117,19 @@ class _MenuPageState extends State<MenuPage> {
                     context,
                     Routes.users,
                     arguments: args,
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.logout),
+                title: Text('Cerrar sesión'),
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.remove('auth_token');
+                  await Navigator.pushNamed(
+                    context,
+                    Routes.initialRoute,
+                    arguments: null,
                   );
                 },
               ),
