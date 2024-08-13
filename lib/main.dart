@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_ganaderia/app_routes.dart';
 import 'package:flutter_application_ganaderia/routes.dart';

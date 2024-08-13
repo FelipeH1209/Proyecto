@@ -1,3 +1,4 @@
+// ignore: unused_import
 import 'dart:ffi';
 
 import 'package:sqflite/sqflite.dart';
@@ -37,7 +38,12 @@ class LocalDatabase {
                             pesoT VARCHAR(20),
                             estaturaT VARCHAR(20),
                             razaT VARCHAR(50),
-                            generoT VARCHAR(50)
+                            generoT VARCHAR(50),
+                            enfermedades VARCHAR(50),
+                            medicamento VARCHAR(30),
+                            categoria VARCHAR(25),
+                            crias VARCHAR(10),
+                            qr VARCHAR(100)
                           )
       ''');
 
@@ -67,13 +73,19 @@ class LocalDatabase {
     return {};
   }
 
-  Future addnovi(pesoT, estaturaT, razaT, generoT) async {
+  Future addnovi(pesoT, estaturaT, razaT, generoT, enfermedades, medicamento,
+      categoria, crias, qr) async {
     final db = await database;
     await db.insert('novillos', {
       "pesoT": pesoT,
       "estaturaT": estaturaT,
       "razaT": razaT,
-      "generoT": generoT
+      "generoT": generoT,
+      "enfermedades": enfermedades,
+      "medicamento": medicamento,
+      "categoria": categoria,
+      "crias": crias,
+      "qr": qr
     });
     return true;
   }
