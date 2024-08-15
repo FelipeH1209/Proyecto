@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+// ignore: unused_import
+import 'package:flutter_application_ganaderia/database/localDb.dart';
+import 'package:flutter_application_ganaderia/pages/codigoqrgenerar.dart';
+// ignore: unused_import
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 const bgColor = Color(0xfffafafa);
 
 class Qrscaner extends StatelessWidget {
   Qrscaner({super.key});
-  final TextEditingController pesoT = TextEditingController();
-  final TextEditingController estaturaT = TextEditingController();
-  final TextEditingController razaT = TextEditingController();
-  final TextEditingController generoT = TextEditingController();
+  final _pesoTController = TextEditingController();
+  final _estaturaTController = TextEditingController();
+  final _razaTController = TextEditingController();
+  final _generoTController = TextEditingController();
+  final _enfermedadesController = TextEditingController();
+  final _medicamentoController = TextEditingController();
+  final _categoriaController = TextEditingController();
+  final _criasController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +31,7 @@ class Qrscaner extends StatelessWidget {
         children: [
           TextField(
             autocorrect: false,
-            controller: pesoT,
+            controller: _pesoTController,
             keyboardType: TextInputType.text,
             maxLength: 10,
             decoration: InputDecoration(
@@ -33,7 +42,7 @@ class Qrscaner extends StatelessWidget {
           ),
           TextField(
             autocorrect: false,
-            controller: estaturaT,
+            controller: _estaturaTController,
             keyboardType: TextInputType.number,
             maxLength: 10,
             decoration: InputDecoration(
@@ -44,7 +53,7 @@ class Qrscaner extends StatelessWidget {
           ),
           TextField(
             autocorrect: false,
-            controller: razaT,
+            controller: _razaTController,
             keyboardType: TextInputType.name,
             maxLength: 10,
             decoration: InputDecoration(
@@ -55,7 +64,7 @@ class Qrscaner extends StatelessWidget {
           ),
           TextField(
             autocorrect: false,
-            controller: generoT,
+            controller: _generoTController,
             keyboardType: TextInputType.name,
             maxLength: 10,
             decoration: InputDecoration(
@@ -64,118 +73,69 @@ class Qrscaner extends StatelessWidget {
                   borderRadius: BorderRadius.circular(9),
                 )),
           ),
-          Align(
-            alignment: Alignment.center,
-            child: GestureDetector(
-              onTap: () {},
-              child: Container(
-                margin: EdgeInsets.only(bottom: 12, top: 12),
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(18),
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 6,
-                          color: Colors.black12,
-                          spreadRadius: 1),
-                    ]),
-                child: Text(
-                  'Guardar',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 12,
-                      color: Colors.white,
-                      fontFamily: 'Poppins'),
-                ),
-              ),
-            ),
+          TextField(
+            autocorrect: false,
+            controller: _enfermedadesController,
+            keyboardType: TextInputType.name,
+            maxLength: 10,
+            decoration: InputDecoration(
+                labelText: "Enfermedades Novillo",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(9),
+                )),
           ),
+          TextField(
+            autocorrect: false,
+            controller: _medicamentoController,
+            keyboardType: TextInputType.name,
+            maxLength: 10,
+            decoration: InputDecoration(
+                labelText: "Medicamentos Novillo",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(9),
+                )),
+          ),
+          TextField(
+            autocorrect: false,
+            controller: _categoriaController,
+            keyboardType: TextInputType.name,
+            maxLength: 10,
+            decoration: InputDecoration(
+                labelText: "Categoria Novillo",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(9),
+                )),
+          ),
+          TextField(
+            autocorrect: false,
+            controller: _criasController,
+            keyboardType: TextInputType.name,
+            maxLength: 10,
+            decoration: InputDecoration(
+                labelText: "Crias Novillo",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(9),
+                )),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => Codigoqrgenerar(
+                  pesoT: _pesoTController.text,
+                  estaturaT: _estaturaTController.text,
+                  razaT: _razaTController.text,
+                  generoT: _generoTController.text,
+                  enfermedades: _enfermedadesController.text,
+                  medicamento: _medicamentoController.text,
+                  categoria: _categoriaController.text,
+                  crias: _criasController.text,
+                ),
+              ));
+            },
+            child: const Text('Generar Qr'),
+          )
         ],
       ),
-      /*   backgroundColor: bgColor,
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'ESCANEO QR',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 40,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Expanded(
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Coloque el Codigo QR en el area',
-                      style: TextStyle(
-                        color: Colors.black87,
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'El codigo se escaneara automaticamente',
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 4,
-              child: MobileScanner(
-                onDetect: (barcode, args) {},
-              ),
-            ),
-            Expanded(
-              child: Container(
-                  child: Column(
-                children: [
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.grey)),
-                      padding: const EdgeInsets.symmetric(horizontal: 1),
-                      child: TextFormField(
-                        decoration: InputDecoration(border: InputBorder.none),
-                      )),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.grey)),
-                      padding: const EdgeInsets.symmetric(horizontal: 1),
-                      child: TextFormField(
-                        decoration: InputDecoration(border: InputBorder.none),
-                      )),
-                ],
-              )),
-            ),
-          ],
-        ),
-      ), */
     );
   }
 }
