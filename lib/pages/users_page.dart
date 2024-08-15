@@ -3,6 +3,7 @@ import 'package:flutter_application_ganaderia/pages/user_add_page.dart';
 import 'package:flutter_application_ganaderia/pages/user_edit_page.dart';
 import 'package:flutter_application_ganaderia/routes.dart';
 import 'package:flutter_application_ganaderia/database/localDb.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UsersPage extends StatefulWidget {
   const UsersPage({super.key});
@@ -54,6 +55,17 @@ class _UsersPageState extends State<UsersPage> {
                 ),
               ),
               ListTile(
+                leading: Icon(Icons.home),
+                title: Text('Inicio'),
+                onTap: () async {
+                  await Navigator.pushNamed(
+                    context,
+                    Routes.home,
+                    arguments: '',
+                  );
+                },
+              ),
+              ListTile(
                 leading: Icon(Icons.search),
                 title: Text('Consultar'),
                 onTap: () async {
@@ -65,7 +77,7 @@ class _UsersPageState extends State<UsersPage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.app_registration),
+                leading: Icon(Icons.addchart_outlined),
                 title: Text('Registrar'),
                 onTap: () async {
                   await Navigator.pushNamed(
@@ -76,7 +88,7 @@ class _UsersPageState extends State<UsersPage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.update),
+                leading: Icon(Icons.edit_note),
                 title: Text('Actualizar'),
                 onTap: () async {
                   await Navigator.pushNamed(
@@ -87,13 +99,38 @@ class _UsersPageState extends State<UsersPage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.group),
-                title: Text('Usuarios'),
+                leading: Icon(Icons.insert_chart_outlined),
+                title: Text('Informes'),
                 onTap: () async {
                   await Navigator.pushNamed(
                     context,
                     Routes.users,
-                    arguments: args,
+                    arguments: '',
+                  );
+                },
+              ),
+              if (args['perfil'] == 1)
+                ListTile(
+                  leading: Icon(Icons.group),
+                  title: Text('Usuarios'),
+                  onTap: () async {
+                    await Navigator.pushNamed(
+                      context,
+                      Routes.users,
+                      arguments: args,
+                    );
+                  },
+                ),
+              ListTile(
+                leading: Icon(Icons.logout),
+                title: Text('Cerrar sesión'),
+                onTap: () async {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.remove('auth_token');
+                  await Navigator.pushNamed(
+                    context,
+                    Routes.initialRoute,
+                    arguments: null,
                   );
                 },
               ),

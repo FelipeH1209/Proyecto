@@ -167,13 +167,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-  void _submit(BuildContext context) {
-    final formState = context.findAncestorStateOfType<FormState>();
-    print(formState);
-
-    // if (_formKey.currentState!.validate()) {
-    //   // send form request
-    // }
-  }
 }

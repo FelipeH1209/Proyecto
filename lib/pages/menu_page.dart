@@ -43,6 +43,7 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    print(args);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _color,
@@ -77,6 +78,17 @@ class _MenuPageState extends State<MenuPage> {
                 ),
               ),
               ListTile(
+                leading: Icon(Icons.home),
+                title: Text('Inicio'),
+                onTap: () async {
+                  await Navigator.pushNamed(
+                    context,
+                    Routes.home,
+                    arguments: '',
+                  );
+                },
+              ),
+              ListTile(
                 leading: Icon(Icons.search),
                 title: Text('Consultar'),
                 onTap: () async {
@@ -88,7 +100,7 @@ class _MenuPageState extends State<MenuPage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.app_registration),
+                leading: Icon(Icons.addchart_outlined),
                 title: Text('Registrar'),
                 onTap: () async {
                   await Navigator.pushNamed(
@@ -99,7 +111,7 @@ class _MenuPageState extends State<MenuPage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.update),
+                leading: Icon(Icons.edit_note),
                 title: Text('Actualizar'),
                 onTap: () async {
                   await Navigator.pushNamed(
@@ -110,16 +122,28 @@ class _MenuPageState extends State<MenuPage> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.group),
-                title: Text('Usuarios'),
+                leading: Icon(Icons.insert_chart_outlined),
+                title: Text('Informes'),
                 onTap: () async {
                   await Navigator.pushNamed(
                     context,
                     Routes.users,
-                    arguments: args,
+                    arguments: '',
                   );
                 },
               ),
+              if (args['perfil'] == 1)
+                ListTile(
+                  leading: Icon(Icons.group),
+                  title: Text('Usuarios'),
+                  onTap: () async {
+                    await Navigator.pushNamed(
+                      context,
+                      Routes.users,
+                      arguments: args,
+                    );
+                  },
+                ),
               ListTile(
                 leading: Icon(Icons.logout),
                 title: Text('Cerrar sesión'),

@@ -19,7 +19,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext Wcontext) {
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -31,18 +31,23 @@ class _MyAppState extends State<MyApp> {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: FutureBuilder(
-            future: _checkLogin(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.data == true) {
-                  return MenuPage();
-                } else {
-                  return LoginPage();
-                }
-              }
-              return CircularProgressIndicator();
-            }),
+        // home: FutureBuilder(
+        //   future: _checkLogin(),
+        //   builder: (context, snapshot) {
+        //     if (snapshot.connectionState == ConnectionState.done) {
+        //       bool validateSesion = false;
+        //       if (snapshot.data == true) {
+        //         validateSesion = true;
+        //       } else {
+        //         validateSesion = false;
+        //       }
+        //       if (validateSesion) {
+        //         return Routes.home;
+        //       }
+        //     }
+        //     return CircularProgressIndicator();
+        //   },
+        // ),
         initialRoute: Routes.initialRoute,
         routes: appRoutes,
       ),
